@@ -13,8 +13,8 @@ class DotsGridView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    private val cellSize = 40f
-    private val dotRadius = 8f
+    val cellSize = 40f
+    val dotRadius = 8f
 
     private val gridPaint = Paint().apply {
         color = Color.LTGRAY
@@ -97,31 +97,6 @@ class DotsGridView @JvmOverloads constructor(
             canvas.drawCircle(x, y, dotRadius, dotPaint)
         }
 
-        // Рисуем линии между соседними точками одного цвета
-        for (i in dotPositions.indices) {
-            for (j in i + 1 until dotPositions.size) {
-                val a = dotPositions[i]
-                val b = dotPositions[j]
-
-                if (a.color.equals(b.color, ignoreCase = true) && isAdjacentWithDiagonals(a, b)) {
-                    val paint = Paint().apply {
-                        color = when (a.color.uppercase()) {
-                            "RED" -> Color.RED
-                            "GREEN" -> Color.GREEN
-                            "BLACK" -> Color.BLACK
-                            else -> Color.GRAY
-                        }
-                        strokeWidth = 4f
-                    }
-
-                    val ax = a.x * cellSize
-                    val ay = a.y * cellSize
-                    val bx = b.x * cellSize
-                    val by = b.y * cellSize
-                    canvas.drawLine(ax, ay, bx, by, paint)
-                }
-            }
-        }
     }
 
 
@@ -190,14 +165,7 @@ class DotsGridView @JvmOverloads constructor(
 
 
 
-    private fun isClosed(region: List<Dot>): Boolean {
-        if (region.size < 3) return false
 
-        // Простая эвристика: если точек больше 3 и у первой и последней есть общий сосед
-        val first = region.first()
-        val last = region.last()
-        return isAdjacentWithDiagonals(first, last)
-    }
 
 
 
